@@ -1,0 +1,10 @@
+<h1>New Dashboard</h1>
+
+<p><%- user.username %></p>
+
+<p>This are your servers</p><br>
+<div>
+    <% user.guilds.forEach((guild) => { %>
+        <%- include('partials/guild', { guild }) %>
+    <% }) %>
+</div>

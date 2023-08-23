@@ -20,7 +20,12 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 //GLOBAL VARIABLES
-
+//Middleware con los datos del despues del auth
+app.use((req, res, next)=>{
+    //local variable internet de express
+    app.locals.user = req.user
+    next();
+})
 
 //ROUTES
 app.use('/', require('./routes/index.routes'))

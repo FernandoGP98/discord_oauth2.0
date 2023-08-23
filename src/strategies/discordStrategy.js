@@ -1,5 +1,8 @@
 
 const {Strategy} = require('passport-discord')
+//const {Strategy} = require('passport-custom')
+//const {Strategy} = require('passport-oauth2');
+
 const passport = require('passport')
 
 const {DISCORD_CLIENT_ID, DISCORD_SECRET_ID} = require('../config')
@@ -14,16 +17,19 @@ passport.deserializeUser(async (id, done) =>{
     if(userById !== undefined && userById !== null)done(null, userById)
 })
 
-passport.use(new Strategy({
-    clientID: DISCORD_CLIENT_ID,
-    clientSecret: DISCORD_SECRET_ID,
-    callbackURL: '/auth/redirect',
-    scope: ['identify', 'guilds']
-}, async (accessToken, refreshToken, profile, done) => {
+passport.use('discord', new Strategy(
+    {
+        // authorizationURL: 'https://discord.com/api/oauth2/authorize',
+        // tokenURL: 'https://discord.com/api/oauth2/token',
+        clientID: DISCORD_CLIENT_ID,
+        clientSecret: DISCORD_SECRET_ID,
+        callbackURL: '/auth/redirect',
+        scope: ['identify', 'guilds'],
+    },
+    async (accessToken, refreshToken, profile, done) => {
     try{
         const user = await User.findOne({discordId: profile.id})
         if(user !== undefined && user !== null){
-            console.log("### USUARIO HAYADO ### ", user)
             return done(null, user)
         }
         const newUser = new User({
@@ -31,7 +37,6 @@ passport.use(new Strategy({
             username: profile.username,
             guilds: profile.guilds
         })
-        console.log("### nuevo usuario ### ", newUser)
         await newUser.save()
     
         done(null, newUser)
