@@ -1,17 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dsicord Auth</title>
-</head>
-<body>
-    <h1>Home</h1>
+<%- include('partials/header') %>
 
-    <pre>
-        <%=
-            user
-        %>
-    </pre>
-</body>
-</html>
+<div class="text-light"
+style="
+height: 100vh;
+background-color: #424549;">
+    <div class="container">
+        <div class="container text-center py-5">
+            <div class="row py-5">
+                <div class="col-xl-8 mx-auto">
+                    <h1>Discord App</h1>
+                    <a href="/auth" class="btn text-light" style="background-color: #5865F2;">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,20 +1,29 @@
 const express = require('express');
 const session = require('express-session');
+const MongoStore = require("connect-mongo")
 const passport = require('passport');
-const path = require('path')
-
-require('./strategies/discordStrategy')
+const path = require('path');
+const { MONGODB_URI, SECRET } = require('./config');
 
 const app = express()
+require('./strategies/discordStrategy')
+
 //SETTINGS
 app.set('view engine', 'ejs')
 app.set('views',path.join(__dirname, 'views'))
 
 //MIDDLEWARE
 app.use(session({
-    secret: 'some secret',
+    secret: SECRET,
+    name: "discord-outh2",
     saveUninitialized: false,
     resave: false,
+    store: MongoStore.create({
+        mongoUrl: MONGODB_URI
+    }),
+    cookie:{
+        maxAge: 60000 * 60 * 24, //1 dia
+    }
 }))
 app.use(passport.initialize())
 app.use(passport.session())
